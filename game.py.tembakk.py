@@ -4,6 +4,12 @@ import random
 
 # Inisialisasi Pygame
 pygame.init()
+pygame.mixer.init()
+
+
+pygame.mixer.music.load("mbg.ogg")
+pygame.mixer.music.set_volume(0.5)  # Volume 0.0 - 1.0
+pygame.mixer.music.play(-1)         # -1 = loop selamanya
 
 # Pengaturan Layar
 LEBAR, TINGGI = 800, 600
