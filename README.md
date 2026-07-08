@@ -24,8 +24,30 @@ For more installation options, please refer to the [official uv documentation](h
 
 ## Running the App
 
+### Using `uv` (Recommended)
+
 To run the application using `uv`, execute the following command from the root directory of the project:
 
 ```sh
 uv run game.py.tembakk.py
+```
+
+### Using standard `python` and `pip`
+
+First, set up a virtual environment and install the dependencies (like `pygame`):
+
+```sh
+python -m venv .venv
+# On Linux/macOS
+source .venv/bin/activate
+# On Windows
+.venv\Scripts\activate
+
+pip install pygame-ce
+```
+
+Then, run the application using the virtual environment's Python:
+
+```sh
+python game.py.tembakk.py
 ```
