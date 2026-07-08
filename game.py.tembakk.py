@@ -10,6 +10,16 @@ import random
 
 # Inisialisasi Pygame
 pygame.init()
+pygame.mixer.init()
+
+# Musik & Sound Effect 
+try:
+    # PERUBAHAN: Musik latar belakang mbg.ogg dihapus agar tidak memutar lagu
+    laser_sound = pygame.mixer.Sound("tembak.ogg")
+    laser_sound.set_volume(0.4)
+except pygame.error:
+    print("File audio tembak.ogg tidak ditemukan. Game berjalan tanpa suara.")
+    laser_sound = None
 
 # Pengaturan Layar
 LEBAR, TINGGI = 800, 600
@@ -42,14 +52,14 @@ kecepatan_pemain = 8
 
 # 3. Struktur Banyak Musuh (Hujan Bola Merah)
 UKURAN_MUSUH = 22
-jumlah_musuh = 8
+jumlah_musuh = 8  
 musuh_list = []
 for _ in range(jumlah_musuh):
     rect_musuh = pygame.Rect(random.randint(0, LEBAR - UKURAN_MUSUH), random.randint(-400, -50), UKURAN_MUSUH, UKURAN_MUSUH)
     kecepatan = random.randint(3, 6)
     musuh_list.append({"rect": rect_musuh, "speed": kecepatan})
 
-# 4. Peluru (Twin Laser)
+# 4. Peluru (Single Laser)
 peluru_list = []
 kecepatan_peluru = 14
 skor = 0
@@ -89,10 +99,12 @@ while running:
             
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
-                laser_kiri = pygame.Rect(pemain.x + 4, pemain.top + 10, 6, 20)
-                laser_kanan = pygame.Rect(pemain.right - 10, pemain.top + 10, 6, 20)
-                peluru_list.append(laser_kiri)
-                peluru_list.append(laser_kanan)
+                if laser_sound:
+                    laser_sound.play()
+
+                # 1 peluru tepat di tengah-tengah pesawat
+                laser_tengah = pygame.Rect(pemain.x + 22, pemain.top, 6, 22)
+                peluru_list.append(laser_tengah)
 
     # 2. Pergerakan Pemain
     tombol = pygame.key.get_pressed()
@@ -148,7 +160,6 @@ while running:
     hitbox_pemain = pemain.inflate(-6, -6)
     for m in musuh_list:
         if hitbox_pemain.colliderect(m["rect"]):
-            # Menggambar teks Game Over ke layar sebelum masuk jeda delay
             teks_over = font_game_over.render("GAME OVER", True, MERAH_METEOR)
             teks_info = font_skor.render(f"Skor Akhir: {skor} | Restart Otomatis...", True, PUTIH)
             
@@ -156,7 +167,6 @@ while running:
             layar.blit(teks_info, (LEBAR // 2 - teks_info.get_width() // 2, TINGGI // 2 + 20))
             pygame.display.update()
             
-            # Cara delay yang lebih aman agar OS tidak menganggap aplikasi freeze/crash
             waktu_awal = pygame.time.get_ticks()
             menunggu = True
             while menunggu:
@@ -164,7 +174,7 @@ while running:
                     if event.type == pygame.QUIT:
                         pygame.quit()
                         sys.exit()
-                if pygame.time.get_ticks() - waktu_awal > 3000: # Jeda 3 detik
+                if pygame.time.get_ticks() - waktu_awal > 3000:
                     menunggu = False
             
             # Reset Total Game State
