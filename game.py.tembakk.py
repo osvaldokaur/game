@@ -1,19 +1,9 @@
-
 import pygame
 import sys
 import random
 
 # Inisialisasi Pygame
 pygame.init()
-pygame.mixer.init()
-
-
-pygame.mixer.music.load("mbg.ogg")
-pygame.mixer.music.set_volume(0.8)  # Volume 0.0 - 1.0
-pygame.mixer.music.play(-1)         # -1 = loop selamanya
-
-laser_sound = pygame.mixer.Sound("tembak.ogg")
-laser_sound.set_volume(0.4)
 
 # Pengaturan Layar
 LEBAR, TINGGI = 800, 600
@@ -93,11 +83,8 @@ while running:
             
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
-                laser_sound.play()
-
                 laser_kiri = pygame.Rect(pemain.x + 4, pemain.top + 10, 6, 20)
                 laser_kanan = pygame.Rect(pemain.right - 10, pemain.top + 10, 6, 20)
-
                 peluru_list.append(laser_kiri)
                 peluru_list.append(laser_kanan)
 
