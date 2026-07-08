@@ -1,3 +1,9 @@
+# /// script
+# dependencies = [
+#   "pygame",
+# ]
+# ///
+
 import pygame
 import sys
 import random
